@@ -100,3 +100,28 @@ const twoSum3 = (nums: number[], target: number): number[] => {
     }
     return []
 }
+
+/**
+ * 像上面那样的话
+ * 第一遍建立哈希表
+ * 第二遍去遍历数组，再去哈希表里找匹配
+ * 这样的话，有两个问题
+ * 一个是建立哈希表的时候，元素不唯一怎么办，存成数组？
+ * 第二个是极限情况下，如果元素都不唯一，那么搞成数组的话
+ * 遍历起来是 O^2 的复杂度
+ * 所以不能一次性建立哈希表
+ * 需要边搜索边建表
+ */
+const twoSum4 = (nums: number[], target: number): number[] => {
+    // 先做合法性校验
+    if (nums.length === 0) return []
+    // 遍历数组 建立哈希表 同时搜索合适的值 搜不到就存在表里
+    const map: Map<number, number> = new Map()
+    for (let i = 0; i < nums.length; i++) {
+        const tar = target - nums[i]
+        if (map[tar] !== undefined) return [i, map[tar]]
+        // 表里存的应该是 数组元素的值 --> 数组元素的索引
+        map[nums[i]] = i
+    }
+    return []
+}
