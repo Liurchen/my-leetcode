@@ -78,10 +78,12 @@ const twoSum3 = (nums: number[], target: number): number[] => {
     // 建立 hashtable 的时候需要考虑如何处理数组中重复元素的问题
     const map = new Map<number, number[]>()
     nums.forEach((n, index) => {
-        if (map[n] === undefined) {
-            map[n] = [index]
+        if (map.get(n) === undefined) {
+            map.set(n, [index])
         } else {
-            map[n].push(index)
+            const tmp = map.get(n) || []
+            tmp.push(index)
+            map.set(n, tmp)
         }
     })
     // after build hashtable for nums
@@ -89,11 +91,11 @@ const twoSum3 = (nums: number[], target: number): number[] => {
     // forEach 无返回值
     for (let i = 0; i < nums.length; i++) {
         const n = target - nums[i]
-        if (map[n] !== undefined) {
-            if (map[n].length === 1 && i !== map[n][0]) return [i, map[n][0]]
-            if (map[n].length > 1) {
-                for (let j = 0; j < map[n].length; j++) {
-                    if (map[n][j] !== i) return [i, j]
+        if (map.get(n) !== undefined) {
+            if ((map.get(n) || []).length === 1 && i !== (map.get(n) || [])[0]) return [i, (map.get(n) || [])[0]]
+            if ((map.get(n) || []).length > 1) {
+                for (let j = 0; j < (map.get(n) || []).length; j++) {
+                    if ((map.get(n) || [])[j] !== i) return [i, j]
                 }
             }
         }
@@ -112,6 +114,8 @@ const twoSum3 = (nums: number[], target: number): number[] => {
  * 所以不能一次性建立哈希表
  * 需要边搜索边建表
  */
+// time 60ms
+// size 44.1mb
 const twoSum4 = (nums: number[], target: number): number[] => {
     // 先做合法性校验
     if (nums.length === 0) return []
@@ -125,3 +129,50 @@ const twoSum4 = (nums: number[], target: number): number[] => {
     }
     return []
 }
+
+/***************************************************************************************************** */
+
+/**
+ * Question 26 
+ * Given 一个升序排列的数组
+ * Require 删除数组中的重复项目
+ * Restrict 原地删除 空间复杂度 O(1)
+ * Return 删除后的长度
+ */
+/**
+ * 思路
+ * 遍历这个升序数组
+ * 如果有重复的元素
+ * 那么这两个元素必然相邻
+ * 使用双指针
+ * 发现重复的话 把重复的值变成最大值
+ * 然后再排序
+ * 时间换空间了属于是
+ */
+const removeDuplicates = (nums: number[]): number => {
+    debugger
+    // 惯例先检查长度
+    if (nums.length === 0) return 0;
+    if (nums.length === 1) return 1;
+    if (nums.length === 2) return nums[0] === nums[1] ? 1 : 2;
+    // 设置两个指针
+    let begin = 0, end = 1;
+    let len = nums.length;
+    // 开始遍历
+    while (end < nums.length) {
+        // 重复的情况
+        if (nums[begin] === nums[end]) {
+            nums[end] = Number.MAX_SAFE_INTEGER;
+            len--;
+            // 这里需要重新排一下顺序
+            nums.sort((a, b) => a - b)
+        }
+        if (nums[begin] < nums[end]) {
+            begin++; end++
+        }
+    }
+    return len;
+}
+
+const nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
+removeDuplicates(nums)
