@@ -120,12 +120,12 @@ const twoSum4 = (nums: number[], target: number): number[] => {
     // 先做合法性校验
     if (nums.length === 0) return []
     // 遍历数组 建立哈希表 同时搜索合适的值 搜不到就存在表里
-    const map: Map<number, number> = new Map()
+    const map: Map<number, number> = new Map();
     for (let i = 0; i < nums.length; i++) {
         const tar = target - nums[i]
-        if (map[tar] !== undefined) return [i, map[tar]]
+        if (map.get(tar) !== undefined) return [i, map.get(tar) || 0]
         // 表里存的应该是 数组元素的值 --> 数组元素的索引
-        map[nums[i]] = i
+        map.set(nums[i], i)
     }
     return []
 }
@@ -150,7 +150,6 @@ const twoSum4 = (nums: number[], target: number): number[] => {
  * 时间换空间了属于是
  */
 const removeDuplicates = (nums: number[]): number => {
-    debugger
     // 惯例先检查长度
     if (nums.length === 0) return 0;
     if (nums.length === 1) return 1;
@@ -174,5 +173,53 @@ const removeDuplicates = (nums: number[]): number => {
     return len;
 }
 
-const nums = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
-removeDuplicates(nums)
+/**
+ * 思路
+ * 遍历数组
+ * 双指针
+ * 后一个指针值与前一个相同时
+ * 后一个置为最大
+ * 当前值比后值小时，前指针 = 后指针 && 后指针++
+ * @param nums 
+ * @returns 
+ */
+// time 76ms fast than 62.33%
+// size 45.9mb small than 5.06% 
+// MAX_SAFE_INTEGER 改成 10001 size 44.7mb small than 16%
+const removeDuplicates1 = (nums: number[]): number => {
+    // 惯例先检查长度
+    if (nums.length === 0) return 0;
+    if (nums.length === 1) return 1;
+    if (nums.length === 2) return nums[0] === nums[1] ? 1 : 2;
+    // 设置两个指针
+    let begin = 0, end = 1;
+    // 用来置换
+    let len = nums.length;
+    // 开始遍历
+    while (end < nums.length) {
+        if (nums[begin] === nums[end]) {
+            nums[end] = 10001;
+            end++;
+            len--;
+        }
+        if (nums[begin] < nums[end]) {
+            begin = end; end++;
+        }
+    }
+    // 最后排序
+    nums.sort((a, b) => a - b)
+    return len;
+}
+
+const swap = (nums: number[], idx1: number, idx2: number): void => {
+    try {
+        nums[idx1] = nums[idx1] ^ nums[idx2];
+        nums[idx2] = nums[idx1] ^ nums[idx2];
+        nums[idx1] = nums[idx1] ^ nums[idx2]
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+const nums = [0, 1, 1, 1, 1, 2, 2, 3, 3, 4]
+removeDuplicates1(nums)
