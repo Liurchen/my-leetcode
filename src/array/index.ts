@@ -221,5 +221,33 @@ const swap = (nums: number[], idx1: number, idx2: number): void => {
     }
 }
 
-const nums = [0, 1, 1, 1, 1, 2, 2, 3, 3, 4]
-removeDuplicates1(nums)
+/***************************************************************************************************** */
+
+/**
+ * 要求原地移除掉值 = val 的元素
+ * 空间复杂度 O(1)
+ * 思路
+ * 单指针遍历数组
+ * 遇到元素 = val 则将该元素的值置为 -1
+ * 因为 0 <= nums[i] <= 50
+ * 最后给数组排下顺序
+ * 把 -1 都放在最后
+ * @param nums 
+ * @param val 
+ * @returns 
+ */
+// time 84ms fast than 7%
+// size 43mb small than 9%
+const removeElement = (nums: number[], val: number): number => {
+    let len = nums.length;
+    let begin = 0;
+    while (begin < nums.length) {
+        if (nums[begin] === val) {
+            nums[begin] = -1;
+            len--;
+        }
+        begin++
+    }
+    nums.sort((a, b) => b - a)
+    return len;
+}
