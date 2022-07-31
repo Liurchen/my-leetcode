@@ -183,9 +183,9 @@ const removeDuplicates = (nums: number[]): number => {
  * @param nums 
  * @returns 
  */
-// time 76ms fast than 62.33%
-// size 45.9mb small than 5.06% 
-// MAX_SAFE_INTEGER 改成 10001 size 44.7mb small than 16%
+// time 76ms faster than 62.33%
+// size 45.9mb smaller than 5.06% 
+// MAX_SAFE_INTEGER 改成 10001 size 44.7mb smaller than 16%
 const removeDuplicates1 = (nums: number[]): number => {
     // 惯例先检查长度
     if (nums.length === 0) return 0;
@@ -236,8 +236,8 @@ const swap = (nums: number[], idx1: number, idx2: number): void => {
  * @param val 
  * @returns 
  */
-// time 84ms fast than 7%
-// size 43mb small than 9%
+// time 84ms faster than 7%
+// size 43mb smaller than 9%
 const removeElement = (nums: number[], val: number): number => {
     let len = nums.length;
     let begin = 0;
@@ -249,5 +249,35 @@ const removeElement = (nums: number[], val: number): number => {
         begin++
     }
     nums.sort((a, b) => b - a)
+    return len;
+}
+
+// 接上面解法
+// 性能瓶颈可能在于最后要给数组排序
+// 我们省略掉这个步骤，再看看复杂度
+// time 60ms faster than 84%
+// size 42mb smaller than 70%
+// 确实能快一些
+const removeElement1 = (nums: number[], val: number): number => {
+    let len = nums.length;
+    let begin = 0;
+    let last = nums.length - 1;
+    let swap = false
+    while (begin < nums.length) {
+        swap = false;
+        if (nums[begin] === val) {
+            // 这里要省略掉排序的话
+            // 需要把这个 -1 挪到数组的最后
+            nums[begin] = nums[last];
+            nums[last] = -1;
+            last--;
+            swap = true;
+            len--;
+        }
+        if (!swap) {
+            begin++
+        }
+    }
+    // nums.sort((a, b) => b - a)
     return len;
 }
