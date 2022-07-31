@@ -281,3 +281,44 @@ const removeElement1 = (nums: number[], val: number): number => {
     // nums.sort((a, b) => b - a)
     return len;
 }
+
+/***************************************************************************************************** */
+
+/**
+ * question 0035
+ * 给一个排序过的数组
+ * 和一个目标值
+ * 要求查找这个值的索引
+ * 时间复杂度要求 logn
+ * 很明显
+ * 需要使用二分搜索
+ * 二分的思路是这样
+ * 设立 left mid right 三个指针
+ * 每次设置下这三个指针的位置
+ * 每次循环将 nums[mid] 跟 target 对比
+ * 如果 mid 大于 target
+ * 说明 target 落在左边的区间里
+ * 那么置 right = mid, mid = (left + right) / 2
+ * 继续搜索
+ * 直到 left >= right
+ * @param nums 
+ * @param target 
+ * @returns 
+ */
+// time 60ms faster than 84%
+// size 42mb smaller than 99%
+const searchInsert = (nums: number[], target: number): number => {
+    // 合法性校验
+    if (nums.length === 0 || nums[0] >= target) return 0;
+    if (nums[nums.length - 1] < target) return nums.length;
+    let left = 0, right = nums.length - 1;
+    while (left < right) {
+        let mid = (left + right) >> 1;
+        if (nums[mid] === target) return mid;
+        if (nums[mid] < target) left = mid + 1;
+        if (nums[mid] > target) right = mid
+    }
+    // 注意 这里推出的情况
+    // 最后结果都是 left === right
+    return left;
+};
