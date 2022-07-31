@@ -322,3 +322,41 @@ const searchInsert = (nums: number[], target: number): number => {
     // 最后结果都是 left === right
     return left;
 };
+
+/***************************************************************************************************** */
+
+/**
+ * question 0066
+ * 给一个由数组组成的整数加一
+ * 用 js api 做比较讨巧
+ * arr.join -> str -> parseInt -> +1 -> str.split -> arr
+ * 上面方法有个问题
+ * 没有考虑到整数溢出的情况
+ * 所以需要改用 es11 bigInt
+ * arr.join -> str -> BigInt -> +1n -> BigInt.toString -> str.split -> arr -> arr.map(char => parseInt(char))
+ * @param digits 
+ * @returns 
+ */
+const plusOne = (digits: number[]): number[] => {
+    // 测试集发现一个潜在的问题
+    // parseInt 会超出范围
+    // js 中运算能保持精度的最大整数是 9007199254740991
+    // 9007199254740991 === Number.MAX_SAFE_INTEGER
+    // 超出会产生 unexpected result
+    // js 为了解决这种情况
+    // 引入了 BigInt 内建类型 版本 ES11(2020)
+    return String(BigInt(digits.join("")) + 1n).toString().split("").map(char => parseInt(char))
+};
+
+// 当然 抛出语言特性
+// 这道题想考的肯定是要我们自己实现
+// 大整数的四则运算符
+// 跟其他语言的大整数运算思路一样
+// 使用 string 并重写运算符
+const plusOne1 = (digits: number[]): number[] => {
+    return []
+};
+
+const add4BigInt = (num1: string, num2: string): string => {
+    return ""
+}
